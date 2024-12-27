@@ -1,0 +1,2 @@
+import mongoose from "mongoose";
+export const connectDb=()=> mongoose.connect('mongodb+srv://yihunietarekegn18:4eyaeaHqbBcE1zYT@cluster0.wcsjj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(()=>console.log("Data base connected")).catch((err)=>console.log(err))
