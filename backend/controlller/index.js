@@ -1,4 +1,4 @@
-import Task from '../models/model.task'
+import { Task } from "../models/model.task.js";
 export const sendTask=(req,res)=>{
 try {
     const {title,description}=req.body;
