@@ -5,9 +5,8 @@ import { MdDeleteForever } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { TiArrowBack } from "react-icons/ti";
 function ListOftodoList() {
-    const navigate=useNavigate();
+  const navigate=useNavigate();
   const task = useSelector(state => state.text); // Adjust the path if using combined reducers
-
   return (
     <div className='p-8'>
       <div className='max-w-[1240px] flex flex-col justify-center mx-auto'>
