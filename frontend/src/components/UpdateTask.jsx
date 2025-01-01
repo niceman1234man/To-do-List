@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTaskAction } from '../action/addTaskAction.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { api } from '../utils/axios.js';
 
 function UpdateTask() {
     const oldtask=useSelector(state=>state.text)
     const navigate=useNavigate();
   const dispatch = useDispatch();
-
+  const {id}=useParams();
+   useEffect(()=>{
+     api.get(`/getOne${id}`).then((task)=>{
+      setTask(task);
+     }).catch((err)=>console.log(err))
+   },[id]);
   const initailtask = {
     title: oldtask.title,
     description: oldtask.description,
@@ -25,9 +31,13 @@ function UpdateTask() {
       alert('Both title and description are required!');
       return;
     }
-    dispatch(addTaskAction(task)); 
-    navigate('/list');
-    setTask(initailtask); 
+    dispatch(addTaskAction(task));
+    api.post(`update/${id}`,task).then(()=>{
+      navigate('/list');
+      setTask(initailtask); 
+    }).catch(err=>console.log(err))
+   
+   
   };
 
   return (
