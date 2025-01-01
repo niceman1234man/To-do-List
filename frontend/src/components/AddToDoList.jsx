@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTaskAction } from '../action/addTaskAction.js';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../utils/axios.js';
 
 function AddToDoList() {
     const navigate=useNavigate();
@@ -22,7 +23,13 @@ function AddToDoList() {
       alert('Both title and description are required!');
       return;
     }
-    dispatch(addTaskAction(task)); 
+    api.post('/create',task).then((newtask)=>{
+      dispatch(addTaskAction(newtask.data)); 
+     
+    }).catch((err)=>{
+      console.log(err)
+    })
+    
     navigate('/list');
     setTask(initailtask); 
   };
