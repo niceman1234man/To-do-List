@@ -6,3 +6,10 @@ export const addTaskAction=(task)=>{
     }
 }
 
+export const getTaskAction=(task)=>{
+return{
+    type:"GET_TASK",
+    payload:task
+}
+}
+
