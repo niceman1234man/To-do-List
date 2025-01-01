@@ -8,7 +8,12 @@ export const addTaskreducer=(state=initailstate,action)=>{
          ...state,
           text: [ ...state.text,action.payload]
           };
-
+        case 'GET_TASK':
+            return{
+                ...state,
+                text: [ ...state.text,action.payload]
+                };
+            
         default:
             return state;
      
