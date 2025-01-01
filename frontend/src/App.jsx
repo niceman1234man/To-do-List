@@ -13,7 +13,7 @@ function App() {
     <Route path='/signin' element={  <Signin/>}/>
     <Route path='/signup' element={  <Signup/>}/>
     <Route path='/list' element={<ListOftodoList/>}/>
-    <Route path='/update-list' element={<UpdateTask/>}/>
+    <Route path='/update-list/:id' element={<UpdateTask/>}/>
     </Routes>
     </>
   )
