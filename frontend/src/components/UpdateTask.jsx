@@ -1,44 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTaskAction } from '../action/addTaskAction.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { api } from '../utils/axios.js';
 
 function UpdateTask() {
-    const oldtask=useSelector(state=>state.text)
-    const navigate=useNavigate();
-  const dispatch = useDispatch();
-  const {id}=useParams();
-   useEffect(()=>{
-     api.get(`/getOne${id}`).then((task)=>{
-      setTask(task);
-     }).catch((err)=>console.log(err))
-   },[id]);
-  const initailtask = {
-    title: oldtask.title,
-    description: oldtask.description,
-  };
-  const [task, setTask] = useState(initailtask);
+  const [task, setTask] = useState({ title: '', description: '' });
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const response = await api.get(`/getOne/${id}`);
+        setTask(response.data.data);
+      } catch (error) {
+        console.error("Error fetching task:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTask();
+  }, [id]);
 
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 
-  const handleTask = (e) => {
+  const handleTask = async (e) => {
     e.preventDefault();
     if (!task.title || !task.description) {
       alert('Both title and description are required!');
       return;
     }
-    dispatch(addTaskAction(task));
-    api.post(`update/${id}`,task).then(()=>{
+
+    try {
+      await api.post(`/update/${id}`, task);
       navigate('/list');
-      setTask(initailtask); 
-    }).catch(err=>console.log(err))
-   
-   
+    } catch (err) {
+      console.error("Error updating task:", err);
+      alert('Failed to update task. Please try again.'); // User feedback
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // Loading state
+  }
 
   return (
     <div className="max-w-full">
@@ -57,7 +66,6 @@ function UpdateTask() {
             onChange={handleChange}
           />
           <textarea
-            type="text"
             name="description"
             placeholder="Task Description"
             className="p-2 border w-[70%]"
@@ -68,7 +76,9 @@ function UpdateTask() {
             Update Task
           </button>
         </form>
-        <button onClick={()=>navigate('/list')}>View list of tasks</button>
+        <button onClick={() => navigate('/list')} className="mt-2">
+          View list of tasks
+        </button>
       </div>
     </div>
   );
